@@ -175,3 +175,23 @@ describe('auth reuse check', () => {
     expect(await userIdByEmail('a@test.dev')).toBeTruthy()
   })
 })
+
+describe('GET /api/items/mine', () => {
+  beforeEach(resetDb)
+
+  it('returns all of the current seller listings, including sold items', async () => {
+    const cookie = await registerUser(app, 'my-listings@test.dev')
+    const owner = await prisma.user.findUniqueOrThrow({ where: { email: 'my-listings@test.dev' } })
+    await createItem(owner.id, { name: 'Live piece' })
+    await createItem(owner.id, { name: 'Sold piece', sold: true })
+    const other = await createUser('other-listings@test.dev')
+    await createItem(other.id, { name: 'Not mine' })
+
+    const response = await request(app).get('/api/items/mine').set('Cookie', cookie)
+    expect(response.status).toBe(200)
+    expect(response.body.items.map((item: { name: string }) => item.name).sort()).toEqual([
+      'Live piece',
+      'Sold piece',
+    ])
+  })
+})

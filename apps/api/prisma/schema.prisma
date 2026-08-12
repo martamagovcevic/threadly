@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Condition {
+  NEW
+  GOOD
+  FAIR
+}
+
+enum Category {
+  DENIM
+  OUTERWEAR
+  DRESSES
+  KNITWEAR
+  SHOES
+  ACCESSORIES
+  OTHER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items    Item[]
+  wishlist Wishlist[]
+  orders   Order[]
+
+  @@map("users")
+}
+
+model Item {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  condition   Condition
+  category    Category
+  imageUrl    String?
+  sold        Boolean   @default(false)
+  hidden      Boolean   @default(false)
+  sellerId    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  seller   User       @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  wishlist Wishlist[]
+  orders   Order[]
+
+  @@index([category])
+  @@index([sold])
+  @@map("items")
+}
+
+model Wishlist {
+  userId String
+  itemId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@id([userId, itemId])
+  @@map("wishlist")
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  buyerId   String
+  itemId    String   @unique
+  pricePaid Float
+  createdAt DateTime @default(now())
+
+  buyer User @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  item  Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([buyerId])
+  @@map("orders")
+}

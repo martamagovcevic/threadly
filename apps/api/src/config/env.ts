@@ -7,6 +7,7 @@ const envSchema = z.object({
   CLIENT_ORIGIN: z.url().default('http://localhost:5173'),
   DATABASE_URL: z.string().default('file:./dev.db'),
   SESSION_SECRET: z.string().min(32).default('dev-only-secret-do-not-use-in-production!'),
+  UPLOAD_DIR: z.string().min(1).default('uploads'),
 })
 
 const parsed = envSchema.safeParse(process.env)

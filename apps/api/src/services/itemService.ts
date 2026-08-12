@@ -1,4 +1,9 @@
-import type { ItemListQuery, ItemListResponse } from '@threadly/shared'
+import type {
+  CreateItemInput,
+  ItemListQuery,
+  ItemListResponse,
+  UpdateItemInput,
+} from '@threadly/shared'
 import type { Prisma } from '@prisma/client'
 import { prisma } from '../lib/prisma'
 import { toPublicItem } from '../lib/itemSerializer'
@@ -71,4 +76,38 @@ export async function getItemById(id: string) {
     where: { id, ...VISIBLE },
     include: { seller: { select: { id: true, name: true } } },
   })
+}
+
+export async function getItemWithSeller(id: string) {
+  return prisma.item.findUnique({
+    where: { id },
+    include: { seller: { select: { id: true, name: true } } },
+  })
+}
+
+export async function createItem(input: CreateItemInput, sellerId: string) {
+  return prisma.item.create({
+    data: { ...input, sellerId },
+    include: { seller: { select: { id: true, name: true } } },
+  })
+}
+
+export async function updateItem(id: string, input: UpdateItemInput) {
+  return prisma.item.update({
+    where: { id },
+    data: input,
+    include: { seller: { select: { id: true, name: true } } },
+  })
+}
+
+export async function markItemSold(id: string) {
+  return prisma.item.update({
+    where: { id },
+    data: { sold: true },
+    include: { seller: { select: { id: true, name: true } } },
+  })
+}
+
+export async function deleteItem(id: string) {
+  return prisma.item.delete({ where: { id } })
 }

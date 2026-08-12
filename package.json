@@ -14,13 +14,17 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "e2e": "playwright test",
+    "db:setup": "npm run db:deploy --workspace=@threadly/api && npm run db:seed --workspace=@threadly/api",
     "format": "prettier --write .",
+    "postinstall": "npm run db:generate --workspace=@threadly/api",
     "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.0.0",
+    "@playwright/test": "^1.62.1",
     "concurrently": "^9.1.2",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^10.0.0",

@@ -13,8 +13,14 @@ export function Layout() {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppBar position="sticky" elevation={1}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Toolbar sx={{ gap: { xs: 0.5, sm: 1 }, overflowX: 'auto' }}>
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            color="inherit"
+            sx={{ flexGrow: 1, textDecoration: 'none', minWidth: 'max-content' }}
+          >
             Threadly
           </Typography>
           <Button component={Link} to="/" color="inherit">
@@ -24,6 +30,9 @@ export function Layout() {
             <>
               <Button component={Link} to="/wishlist" color="inherit">
                 Wishlist
+              </Button>
+              <Button component={Link} to="/listings" color="inherit">
+                Sell
               </Button>
               <Button component={Link} to="/orders" color="inherit">
                 Orders

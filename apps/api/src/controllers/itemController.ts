@@ -8,6 +8,7 @@ import {
   getItemById,
   getItemWithSeller,
   listItems,
+  listSellerItems,
   markItemSold,
   setItemImage,
   updateItem,
@@ -28,6 +29,11 @@ export async function getOne(req: Request, res: Response) {
   }
 
   res.json({ item: toPublicItem(item) })
+}
+
+export async function mine(_req: Request, res: Response) {
+  const items = await listSellerItems(res.locals.user.id)
+  res.json({ items: items.map(toPublicItem) })
 }
 
 export async function create(req: Request, res: Response) {

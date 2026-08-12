@@ -108,6 +108,14 @@ export async function markItemSold(id: string) {
   })
 }
 
+export async function setItemImage(id: string, imageUrl: string) {
+  return prisma.item.update({
+    where: { id },
+    data: { imageUrl },
+    include: { seller: { select: { id: true, name: true } } },
+  })
+}
+
 export async function deleteItem(id: string) {
   return prisma.item.delete({ where: { id } })
 }

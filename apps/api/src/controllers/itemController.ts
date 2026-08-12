@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
 import type { CreateItemInput, ItemListQuery, UpdateItemInput } from '@threadly/shared'
 import { toPublicItem } from '../lib/itemSerializer'
+import { PUBLIC_UPLOAD_PATH } from '../lib/upload'
 import {
   createItem,
   deleteItem,
@@ -8,6 +9,7 @@ import {
   getItemWithSeller,
   listItems,
   markItemSold,
+  setItemImage,
   updateItem,
 } from '../services/itemService'
 import { itemNotFound, forbidden } from './itemErrors'
@@ -79,4 +81,19 @@ export async function remove(req: Request, res: Response) {
 
   await deleteItem(existing.id)
   res.status(204).end()
+}
+
+export async function setImage(req: Request, res: Response) {
+  if (!req.file) {
+    res
+      .status(400)
+      .json({ error: { code: 'IMAGE_REQUIRED', message: 'An image file is required' } })
+    return
+  }
+
+  const item = await setItemImage(
+    (res.locals.item as { id: string }).id,
+    `${PUBLIC_UPLOAD_PATH}/${req.file.filename}`,
+  )
+  res.json({ item: toPublicItem(item) })
 }

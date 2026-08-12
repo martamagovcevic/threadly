@@ -7,6 +7,7 @@ import { errorHandler, notFoundHandler } from './middleware/error'
 import { authRouter } from './routes/auth'
 import { healthRouter } from './routes/health'
 import { itemsRouter } from './routes/items'
+import { ordersRouter } from './routes/orders'
 import { wishlistRouter } from './routes/wishlist'
 
 export function createApp() {
@@ -21,6 +22,7 @@ export function createApp() {
   app.use('/api/health', healthRouter)
   app.use('/api/auth', authRouter)
   app.use('/api/items', itemsRouter)
+  app.use('/api/orders', ordersRouter)
   app.use('/api/wishlist', wishlistRouter)
 
   app.use(notFoundHandler)

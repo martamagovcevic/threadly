@@ -25,6 +25,9 @@ export function Layout() {
               <Button component={Link} to="/wishlist" color="inherit">
                 Wishlist
               </Button>
+              <Button component={Link} to="/orders" color="inherit">
+                Orders
+              </Button>
               <Button color="inherit" onClick={() => void logout()}>
                 Sign out
               </Button>

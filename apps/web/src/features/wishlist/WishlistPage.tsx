@@ -24,6 +24,14 @@ export function WishlistPage() {
     await api(`/wishlist/${id}`, { method: 'DELETE' })
     setItems((current) => current.filter((item) => item.id !== id))
   }
+  async function buy(item: Item) {
+    try {
+      await api('/orders', { method: 'POST', body: JSON.stringify({ itemId: item.id }) })
+      setItems((current) => current.filter((candidate) => candidate.id !== item.id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Checkout failed')
+    }
+  }
   return (
     <Stack spacing={3}>
       <Typography variant="h3" component="h1">
@@ -36,7 +44,12 @@ export function WishlistPage() {
         <Grid container spacing={3}>
           {items.map((item) => (
             <Grid key={item.id} size={{ xs: 12, sm: 6, md: 4 }}>
-              <ItemCard item={item} wished onToggle={() => void remove(item.id)} />
+              <ItemCard
+                item={item}
+                wished
+                onToggle={() => void remove(item.id)}
+                onBuy={user?.id !== item.seller.id ? () => void buy(item) : undefined}
+              />
             </Grid>
           ))}
         </Grid>

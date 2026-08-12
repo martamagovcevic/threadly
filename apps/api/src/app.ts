@@ -5,6 +5,7 @@ import { createSessionMiddleware } from './lib/session'
 import { errorHandler, notFoundHandler } from './middleware/error'
 import { authRouter } from './routes/auth'
 import { healthRouter } from './routes/health'
+import { itemsRouter } from './routes/items'
 
 export function createApp() {
   const app = express()
@@ -15,6 +16,7 @@ export function createApp() {
 
   app.use('/api/health', healthRouter)
   app.use('/api/auth', authRouter)
+  app.use('/api/items', itemsRouter)
 
   app.use(notFoundHandler)
   app.use(errorHandler)

@@ -91,3 +91,12 @@ model Order {
   @@index([buyerId])
   @@map("orders")
 }
+
+model Session {
+  id        String   @id
+  data      String
+  expiresAt DateTime
+
+  @@index([expiresAt])
+  @@map("sessions")
+}

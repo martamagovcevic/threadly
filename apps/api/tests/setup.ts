@@ -1,0 +1,4 @@
+process.env.NODE_ENV = 'test'
+process.env.DATABASE_URL = 'file:./test.db'
+process.env.SESSION_SECRET = 'test-secret-0123456789abcdef0123456789abcdef'
+process.env.CLIENT_ORIGIN = 'http://localhost:5173'

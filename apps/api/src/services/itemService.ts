@@ -78,6 +78,14 @@ export async function getItemById(id: string) {
   })
 }
 
+export async function listSellerItems(sellerId: string) {
+  return prisma.item.findMany({
+    where: { sellerId },
+    orderBy: { createdAt: 'desc' },
+    include: { seller: { select: { id: true, name: true } } },
+  })
+}
+
 export async function getItemWithSeller(id: string) {
   return prisma.item.findUnique({
     where: { id },

@@ -28,6 +28,11 @@ export function Layout() {
               <Button component={Link} to="/orders" color="inherit">
                 Orders
               </Button>
+              {user.role === 'ADMIN' && (
+                <Button component={Link} to="/admin" color="inherit">
+                  Admin
+                </Button>
+              )}
               <Button color="inherit" onClick={() => void logout()}>
                 Sign out
               </Button>

@@ -55,4 +55,17 @@ describe('CatalogPage', () => {
     await waitFor(() => expect(api).toHaveBeenCalledWith('/wishlist/item-1', { method: 'POST' }))
     expect(await screen.findByRole('button', { name: /remove vintage levi/i })).toBeInTheDocument()
   })
+
+  it('checks out an item and removes it from the rack', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    renderCatalog()
+    fireEvent.click(await screen.findByRole('button', { name: /buy now/i }))
+    await waitFor(() =>
+      expect(api).toHaveBeenCalledWith('/orders', {
+        method: 'POST',
+        body: JSON.stringify({ itemId: 'item-1' }),
+      }),
+    )
+    expect(screen.queryByText(/vintage levi/i)).not.toBeInTheDocument()
+  })
 })

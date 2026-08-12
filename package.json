@@ -17,6 +17,7 @@
     "e2e": "playwright test",
     "db:setup": "npm run db:deploy --workspace=@threadly/api && npm run db:seed --workspace=@threadly/api",
     "format": "prettier --write .",
+    "postinstall": "npm run db:generate --workspace=@threadly/api",
     "prepare": "husky"
   },
   "devDependencies": {

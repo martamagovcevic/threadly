@@ -1,4 +1,6 @@
 import type { Item, Role } from '@prisma/client'
+import type { Express } from 'express'
+import request from 'supertest'
 import { prisma } from '../src/lib/prisma'
 import { hashPassword } from '../src/lib/password'
 
@@ -10,6 +12,21 @@ export async function resetDb() {
     prisma.session.deleteMany(),
     prisma.user.deleteMany(),
   ])
+}
+
+export function sessionCookie(res: request.Response): string[] {
+  const value = res.headers['set-cookie']
+  return Array.isArray(value) ? value : value ? [value] : []
+}
+
+export async function registerUser(
+  app: Express,
+  email: string,
+  name = 'Test User',
+  password = 'password123',
+) {
+  const res = await request(app).post('/api/auth/register').send({ email, name, password })
+  return sessionCookie(res)
 }
 
 export async function createUser(email: string, role: Role = 'USER', name = 'Test User') {

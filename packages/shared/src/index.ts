@@ -1,4 +1,5 @@
 export * from './auth'
 export * from './enums'
 export * from './items'
+export * from './orders'
 export * from './wishlist'

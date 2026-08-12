@@ -7,6 +7,15 @@ export const notFoundHandler: RequestHandler = (req, res) => {
 }
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  if (err?.name === 'MulterError') {
+    const message =
+      err.code === 'LIMIT_FILE_SIZE'
+        ? 'Image is too large (max 5MB)'
+        : `Upload failed: ${err.message}`
+    res.status(400).json({ error: { code: 'UPLOAD_ERROR', message } })
+    return
+  }
+
   const status = typeof err.status === 'number' ? err.status : 500
 
   if (status >= 500) {

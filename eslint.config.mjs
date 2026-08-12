@@ -25,11 +25,6 @@ export default tseslint.config(
   },
   {
     files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
     rules: {
       'no-undef': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -38,6 +33,18 @@ export default tseslint.config(
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+    },
+  },
+  {
+    files: ['apps/web/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+  {
+    files: ['apps/api/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: globals.node,
     },
   },
   prettier,

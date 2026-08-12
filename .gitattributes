@@ -1,0 +1,2 @@
+# Normalize line endings and prevent CRLF churn
+* text=auto eol=lf

@@ -4,6 +4,7 @@ import { CatalogPage } from './features/catalog/CatalogPage'
 import { AuthProvider } from './features/auth/AuthContext'
 import { AuthPage } from './features/auth/AuthPage'
 import { WishlistPage } from './features/wishlist/WishlistPage'
+import { OrdersPage } from './features/orders/OrdersPage'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
             <Route index element={<CatalogPage />} />
             <Route path="account" element={<AuthPage />} />
             <Route path="wishlist" element={<WishlistPage />} />
+            <Route path="orders" element={<OrdersPage />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Route>
         </Routes>

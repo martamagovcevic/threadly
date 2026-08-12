@@ -2,6 +2,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -25,10 +26,12 @@ export function ItemCard({
   item,
   wished,
   onToggle,
+  onBuy,
 }: {
   item: Item
   wished: boolean
   onToggle?: () => void
+  onBuy?: () => void
 }) {
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -68,6 +71,11 @@ export function ItemCard({
           <Chip label={item.condition.toLowerCase()} size="small" />
           <Typography variant="h6">{formatPrice(item.price)}</Typography>
         </Stack>
+        {onBuy && (
+          <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={onBuy}>
+            Buy now
+          </Button>
+        )}
       </CardContent>
     </Card>
   )
@@ -114,6 +122,16 @@ export function CatalogPage() {
     })
   }
 
+  async function buy(item: Item) {
+    if (!window.confirm(`Purchase ${item.name} for ${formatPrice(item.price)}?`)) return
+    try {
+      await api('/orders', { method: 'POST', body: JSON.stringify({ itemId: item.id }) })
+      setItems((current) => current.filter((candidate) => candidate.id !== item.id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Checkout failed')
+    }
+  }
+
   const countLabel = useMemo(
     () => `${items.length} ${items.length === 1 ? 'piece' : 'pieces'}`,
     [items.length],
@@ -150,6 +168,7 @@ export function CatalogPage() {
                   item={item}
                   wished={wishedIds.has(item.id)}
                   onToggle={user ? () => void toggle(item.id) : undefined}
+                  onBuy={user && user.id !== item.seller.id ? () => void buy(item) : undefined}
                 />
               </Grid>
             ))}

@@ -5,6 +5,7 @@ import { createSessionMiddleware } from './lib/session'
 import { UPLOAD_DIR } from './lib/upload'
 import { errorHandler, notFoundHandler } from './middleware/error'
 import { authRouter } from './routes/auth'
+import { adminRouter } from './routes/admin'
 import { healthRouter } from './routes/health'
 import { itemsRouter } from './routes/items'
 import { ordersRouter } from './routes/orders'
@@ -20,6 +21,7 @@ export function createApp() {
   app.use('/uploads', express.static(UPLOAD_DIR))
 
   app.use('/api/health', healthRouter)
+  app.use('/api/admin', adminRouter)
   app.use('/api/auth', authRouter)
   app.use('/api/items', itemsRouter)
   app.use('/api/orders', ordersRouter)
